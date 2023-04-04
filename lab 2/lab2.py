@@ -29,14 +29,16 @@ def CCIR_path_loss(d, f, b, hb, hm):
     return path_loss
 
 
-def Hata_Model_urban(f, h, a, d,C=0):
-    if f> 1500:
+def Hata_Model_urban(f, h, a, d, C=0):
+    if f > 1500:
         path_loss = 69.55+26.16 * \
             np.log10(f)-13.82*np.log10(h)-a+(44.9-6.55*np.log10(h))*np.log10(d)
     else:
         path_loss = 46.3+33.9 * \
-            np.log10(f)-13.82*np.log10(h)-a+(44.9-6.55*np.log10(h))*np.log10(d)+C
+            np.log10(f)-13.82*np.log10(h)-a + \
+            (44.9-6.55*np.log10(h))*np.log10(d)+C
     return path_loss
+
 
 def Hata_Model_medium_city_correction_factor(f, hre):
     Hata_Model_medium_city_correction_factor = (
