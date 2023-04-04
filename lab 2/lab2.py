@@ -28,59 +28,46 @@ def CCIR_path_loss(d, f, b, hb, hm):
         (44.9 - 6.55 * np.log10(hb)) * np.log10(d) - b
     return path_loss
 
-# done check it out
 
-
-def Hata_Model_medium_city(f, h):
-    # f carrier frequency
-    # h height of moblie anttena hm
-    path_loss = (1.1*np.log10(f)-0.7)*h-(1.56*np.log10(f)-0.8)
-    return path_loss
-
-
-def Hata_Model_large_city(h, f):
-    # f carrier frequency
-    # h height of moblie anttena hm
-    if f <= 300:
-        path_loss = 8.29*np.power((np.log10(1.54*h)), 2)-1.1
+def Hata_Model_urban(f, h, a, d,C=0):
+    if f> 1500:
+        path_loss = 69.55+26.16 * \
+            np.log10(f)-13.82*np.log10(h)-a+(44.9-6.55*np.log10(h))*np.log10(d)
     else:
-        path_loss = 3.2*np.power((np.log10(11.75*h), 2))-4.97
+        path_loss = 46.3+33.9 * \
+            np.log10(f)-13.82*np.log10(h)-a+(44.9-6.55*np.log10(h))*np.log10(d)+C
     return path_loss
 
-
-def Hata_Model_urban(f, h, hr, d):
-    # f carrier frequency
-    # hr height of moblie anttena hm
-    # h height of base station
-    # d distance between transmitter and receiver in km
-    a = (1.1 * np.log10(f) - 0.7) * hr - (1.56 * np.log10(f) - 0.8)
-    path_loss = 69.55+26.16 * \
-        np.log10(f)-13.82*np.log10(h)-a+(44.9-6.55*np.log10(h))*np.log10(d)
-    return path_loss
+def Hata_Model_medium_city_correction_factor(f, hre):
+    Hata_Model_medium_city_correction_factor = (
+        1.1*np.log10(f)-0.7)*hre-(1.56*np.log10(f)-0.8)
+    return Hata_Model_medium_city_correction_factor
 
 
-def Hata_Model_suburban(f, h, hr, d):
-    # f carrier frequency
-    # h height of base station
-    # d distance between transmitter and receiver in km
-    path_loss = Hata_Model_urban(f, h, hr, d)-2 * \
+def Hata_Model_large_city_corection_factor(hre, f):
+    if f <= 300:
+        correction_factor = 8.29*np.power((np.log10(1.54*hre)), 2)-1.1
+    else:
+        correction_factor = 3.2*np.power((np.log10(11.75*hre), 2))-4.97
+    return correction_factor
+
+
+def Hata_Model_suburban(f, h, a, d):
+    path_loss = Hata_Model_urban(f, h, a, d)-2 * \
         np.power((np.log10(f/28)), 2) - 5.4
     return path_loss
 
 
-def Hata_Model_rural(f, h, d):
-    # f carrier frequency
-    # h height of base station
-    # d distance between transmitter and receiver in km
+def Hata_Model_rural(f, h, a, d):
     path_loss = Hata_Model_urban(
-        f, h, hr, d)-4.78*np.power(np.log10(f), 2)+18.33*np.log10(f)-40.98
+        f, h, a, d)-4.78*np.power(np.log10(f), 2)+18.33*np.log10(f)-40.98
     return path_loss
 
 
-def plot_default(title):
+def plot_default(title, x_label='Distance (m)', y_label='Path loss (dB)'):
     plt.legend()
-    plt.xlabel('Distance (m)')  # Add a label for the x-axis
-    plt.ylabel('Path loss (dB)')
+    plt.xlabel(f'{x_label}')  # Add a label for the x-axis
+    plt.ylabel(f'{y_label}')
     plt.title(f'{title}')
 
 
@@ -132,12 +119,14 @@ plt.plot(d, Hata_Model_urban(f[1], 35), 'r', label='1800 MHz')
 
 
 fig10 = plt.figure(9)
-plt.plot(d, Hata_Model_large_city(35, f[0]), label='900 MHz')
-plt.plot(d, Hata_Model_large_city(35, f[1]), 'r', label='1800 MHz')
+plt.plot(d, Hata_Model_large_city_corection_factor(35, f[0]), label='900 MHz')
+plt.plot(d, Hata_Model_large_city_corection_factor(
+    35, f[1]), 'r', label='1800 MHz')
 
 
 fig11 = plt.figure(10)
-plt.plot(d, Hata_Model_medium_city(f[0], 35), label='900 MHz')
-plt.plot(d, Hata_Model_medium_city(f[1], 35), 'r', label='1800 MHz')
+plt.plot(d, Hata_Model_medium_city_correction_factor(
+    f[0], 35), label='900 MHz')
+plt.plot(d, Hata_Model_medium_(f[1], 35), 'r', label='1800 MHz')
 
 plt.show()
