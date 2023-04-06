@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-d = np.arange(1, 1000, 1)
+d = np.arange(1, 11, 1)
 f = [900, 1800]
 Gt = 28
 hm = 1
@@ -98,158 +98,181 @@ def plot_default(title, x_label='Distance (m)', y_label='Path loss (dB)'):
     plt.grid(True)
 
 
-CCIR_path_loss_1 = CCIR_path_loss(d, f[0], 0.25, 35, 1)
-CCIR_path_loss_2 = CCIR_path_loss(d, f[1], 0.25, 35, 1)
-path_loss = free_space_path_loss(d, f[0], Gt)
-path_loss_2 = free_space_path_loss(d, f[1], Gt)
+def free_space_received_power(transmitted_power, distance, frequency, tx_antenna_gain=1, rx_antenna_gain=1):
+    """
+    Calculates the received power at a receiver given the transmitted power, distance, path loss, wavelength,
+    and antenna gains.
+
+    Args:
+    transmitted_power (float): Transmitted power in watts.
+    distance (float): Distance in meters between transmitter and receiver.
+    path_loss (float): Path loss in dB.
+    wavelength (float): Wavelength in meters of the radio signal.
+    tx_antenna_gain (float): Gain of the transmitting antenna.
+    rx_antenna_gain (float): Gain of the receiving antenna.
+
+    Returns:
+    float: Received power in watts.
+    """
+    c=3e8
+    Lambda_ = c/frequency 
+    numerator = transmitted_power * tx_antenna_gain * rx_antenna_gain(Lambda_/ (4 * np.pi * distance))**2
+    return numerator
+
+# free_space_received_power(39,d,900e6,14,14)
+
+CCIR_path_loss_1=CCIR_path_loss(d, f[0], 0.25, 35, 1)
+CCIR_path_loss_2=CCIR_path_loss(d, f[1], 0.25, 35, 1)
+path_loss=free_space_path_loss(d, f[0], Gt)
+path_loss_2=free_space_path_loss(d, f[1], Gt)
 
 
-fig1 = plt.figure(1)
-plt.plot(d, path_loss, label='900 MHz')
+fig1=plt.figure(1)
+plt.plot(d, path_loss, label = '900 MHz')
 plot_default("free_space_path_loss")
 
 
-fig2 = plt.figure(2)
-plt.plot(d, path_loss_2, 'r', label='1800 MHz')
+fig2=plt.figure(2)
+plt.plot(d, path_loss_2, 'r', label = '1800 MHz')
 plot_default("free_space_path_loss")
 
 
-fig3 = plt.figure(3)
-plt.plot(d, path_loss, label='900 MHz')
-plt.plot(d, path_loss_2, 'r', label='1800 MHz')
+fig3=plt.figure(3)
+plt.plot(d, path_loss, label = '900 MHz')
+plt.plot(d, path_loss_2, 'r', label = '1800 MHz')
 plot_default("free_space_path_loss")
 
 
-fig4 = plt.figure(4)
-plt.plot(d, CCIR_path_loss_2, 'r', label='1800 MHz')
+fig4=plt.figure(4)
+plt.plot(d, CCIR_path_loss_2, 'r', label = '1800 MHz')
 plot_default("CCIR_path_loss")
 
 
-fig5 = plt.figure(5)
-plt.plot(d, CCIR_path_loss_1, label='900 MHz')
-plt.plot(d, CCIR_path_loss_2, 'r', label='1800 MHz')
+fig5=plt.figure(5)
+plt.plot(d, CCIR_path_loss_1, label = '900 MHz')
+plt.plot(d, CCIR_path_loss_2, 'r', label = '1800 MHz')
 plot_default("CCIR_path_loss")
 
 
-fig6 = plt.figure(6)
+fig6=plt.figure(6)
 plt.plot(d, Hata_Model_urban(
-    f[0], 35, Hata_Model_medium_city_correction_factor(900, hm), d), label='900 MHz')
+    f[0], 35, Hata_Model_medium_city_correction_factor(900, hm), d), label = '900 MHz')
 plt.plot(d, Hata_Model_urban(f[1], 35, Hata_Model_medium_city_correction_factor(
-    1800, hm), d), 'r', label='1800 MHz')
+    1800, hm), d), 'r', label = '1800 MHz')
 plot_default("Hata Model urban medium city")
 
 
-fig7 = plt.figure(7)
+fig7=plt.figure(7)
 plt.plot(d, Hata_Model_urban(
-    f[0], 35, Hata_Model_large_city_corection_factor(900, d), d), label='900 MHz')
+    f[0], 35, Hata_Model_large_city_corection_factor(900, d), d), label = '900 MHz')
 plt.plot(d, Hata_Model_urban(f[1], 35, Hata_Model_large_city_corection_factor(
-    1800, d), d, 3), 'r', label='1800 MHz')
+    1800, d), d, 3), 'r', label = '1800 MHz')
 plot_default("Hata Model urban Metroploitan city")
 
 
-fig8 = plt.figure(8)
+fig8=plt.figure(8)
 plt.plot(d, Hata_Model_suburban(
-    f[0], 35, Hata_Model_medium_city_correction_factor(900, hm), d), label='900 MHz')
+    f[0], 35, Hata_Model_medium_city_correction_factor(900, hm), d), label = '900 MHz')
 plt.plot(d, Hata_Model_suburban(f[1], 35, Hata_Model_medium_city_correction_factor(
-    1800, hm), d), 'r', label='1800 MHz')
+    1800, hm), d), 'r', label = '1800 MHz')
 plot_default("Hata Model suburban medium city")
 
 
-fig9 = plt.figure(9)
+fig9=plt.figure(9)
 plt.plot(d, Hata_Model_suburban(
-    f[0], 35, Hata_Model_large_city_corection_factor(900, hm), d), label='900 MHz')
+    f[0], 35, Hata_Model_large_city_corection_factor(900, hm), d), label = '900 MHz')
 plt.plot(d, Hata_Model_suburban(f[1], 35, Hata_Model_large_city_corection_factor(
-    1800, hm), d), 'r', label='1800 MHz')
+    1800, hm), d), 'r', label = '1800 MHz')
 plot_default("Hata Model suburban Metroplotian city")
 
 
-fig10 = plt.figure(10)
+fig10=plt.figure(10)
 plt.plot(d, Hata_Model_rural(
-    f[0], 35, Hata_Model_medium_city_correction_factor(900, hm), d), label='900 MHz')
+    f[0], 35, Hata_Model_medium_city_correction_factor(900, hm), d), label = '900 MHz')
 plt.plot(d, Hata_Model_rural(f[1], 35, Hata_Model_medium_city_correction_factor(
-    1800, hm), d), 'r', label='1800 MHz')
+    1800, hm), d), 'r', label = '1800 MHz')
 plot_default("Hata Model rural medium city")
 
 
-fig11 = plt.figure(11)
+fig11=plt.figure(11)
 plt.plot(d, Hata_Model_rural(
-    f[0], 35, Hata_Model_large_city_corection_factor(900, hm), d), label='900 MHz')
+    f[0], 35, Hata_Model_large_city_corection_factor(900, hm), d), label = '900 MHz')
 plt.plot(d, Hata_Model_rural(f[1], 35, Hata_Model_large_city_corection_factor(
-    1800, hm), d, 3),  label='1800 MHz')
+    1800, hm), d, 3),  label = '1800 MHz')
 plot_default("Hata Model rural Metroplotian city")
 
-fig12 = plt.figure(12)
+fig12=plt.figure(12)
 # plot all hata models for urban, suburban and rural and compare them with both frequencies
 plt.plot(d, Hata_Model_urban(f[0], 35, Hata_Model_medium_city_correction_factor(
-    900, hm), d), label='urban 900 MHz')
+    900, hm), d), label = 'urban 900 MHz')
 plt.plot(d, Hata_Model_urban(f[1], 35, Hata_Model_medium_city_correction_factor(
-    1800, hm), d),  label='urban 1800 MHz')
+    1800, hm), d),  label = 'urban 1800 MHz')
 plt.plot(d, Hata_Model_suburban(f[0], 35, Hata_Model_medium_city_correction_factor(
-    900, hm), d), label='suburban 900 MHz')
+    900, hm), d), label = 'suburban 900 MHz')
 plt.plot(d, Hata_Model_suburban(f[1], 35, Hata_Model_medium_city_correction_factor(
-    1800, hm), d),  label='suburban 1800 MHz')
+    1800, hm), d),  label = 'suburban 1800 MHz')
 plt.plot(d, Hata_Model_rural(f[0], 35, Hata_Model_medium_city_correction_factor(
-    900, hm), d), label='rural 900 MHz')
+    900, hm), d), label = 'rural 900 MHz')
 plt.plot(d, Hata_Model_rural(f[1], 35, Hata_Model_medium_city_correction_factor(
-    1800, hm), d),  label='rural 1800 MHz')
+    1800, hm), d),  label = 'rural 1800 MHz')
 # do large city correction for 1800 MHz
 plt.plot(d, Hata_Model_urban(f[1], 35, Hata_Model_large_city_corection_factor(
-    1800, d), d, 3),  label='urban 1800 MHz large city')
+    1800, d), d, 3),  label = 'urban 1800 MHz large city')
 plt.plot(d, Hata_Model_suburban(f[1], 35, Hata_Model_large_city_corection_factor(
-    1800, hm), d),  label='suburban 1800 MHz large city')
+    1800, hm), d),  label = 'suburban 1800 MHz large city')
 plt.plot(d, Hata_Model_rural(f[1], 35, Hata_Model_large_city_corection_factor(
-    1800, hm), d, 3),  label='rural 1800 MHz large city')
+    1800, hm), d, 3),  label = 'rural 1800 MHz large city')
 # do large city correction for 900 MHz
 plt.plot(d, Hata_Model_urban(f[0], 35, Hata_Model_large_city_corection_factor(
-    900, d), d),  label='urban 900 MHz large city')
+    900, d), d),  label = 'urban 900 MHz large city')
 plt.plot(d, Hata_Model_suburban(f[0], 35, Hata_Model_large_city_corection_factor(
-    900, hm), d),  label='suburban 900 MHz large city')
+    900, hm), d),  label = 'suburban 900 MHz large city')
 plt.plot(d, Hata_Model_rural(f[0], 35, Hata_Model_large_city_corection_factor(
-    900, hm), d),  label='rural 900 MHz large city')
+    900, hm), d),  label = 'rural 900 MHz large city')
 
 
 plot_default(
     "All Hata Models COMPARISON (urban, suburban, rural) for 900 and 1800 MHz")
 
-fig12 = plt.figure(13)
+fig12=plt.figure(13)
 plt.plot(d, Hata_Model_urban(f[0], 35, Hata_Model_medium_city_correction_factor(
-    900, hm), d), label='urban 900 MHz')
+    900, hm), d), label = 'urban 900 MHz')
 plt.plot(d, Hata_Model_urban(f[1], 35, Hata_Model_medium_city_correction_factor(
-    1800, hm), d),  label='urban 1800 MHz')
+    1800, hm), d),  label = 'urban 1800 MHz')
 plt.plot(d, Hata_Model_suburban(f[0], 35, Hata_Model_medium_city_correction_factor(
-    900, hm), d), label='suburban 900 MHz')
+    900, hm), d), label = 'suburban 900 MHz')
 plt.plot(d, Hata_Model_suburban(f[1], 35, Hata_Model_medium_city_correction_factor(
-    1800, hm), d),  label='suburban 1800 MHz')
+    1800, hm), d),  label = 'suburban 1800 MHz')
 plt.plot(d, Hata_Model_rural(f[0], 35, Hata_Model_medium_city_correction_factor(
-    900, hm), d), label='rural 900 MHz')
+    900, hm), d), label = 'rural 900 MHz')
 plt.plot(d, Hata_Model_rural(f[1], 35, Hata_Model_medium_city_correction_factor(
-    1800, hm), d),  label='rural 1800 MHz')
+    1800, hm), d),  label = 'rural 1800 MHz')
 # do large city correction for 1800 MHz
 plt.plot(d, Hata_Model_urban(f[1], 35, Hata_Model_large_city_corection_factor(
-    1800, d), d, 3),  label='urban 1800 MHz large city')
+    1800, d), d, 3),  label = 'urban 1800 MHz large city')
 plt.plot(d, Hata_Model_suburban(f[1], 35, Hata_Model_large_city_corection_factor(
-    1800, hm), d),  label='suburban 1800 MHz large city')
+    1800, hm), d),  label = 'suburban 1800 MHz large city')
 plt.plot(d, Hata_Model_rural(f[1], 35, Hata_Model_large_city_corection_factor(
-    1800, hm), d, 3),  label='rural 1800 MHz large city')
+    1800, hm), d, 3),  label = 'rural 1800 MHz large city')
 # do large city correction for 900 MHz
 plt.plot(d, Hata_Model_urban(f[0], 35, Hata_Model_large_city_corection_factor(
-    900, d), d),  label='urban 900 MHz large city')
+    900, d), d),  label = 'urban 900 MHz large city')
 plt.plot(d, Hata_Model_suburban(f[0], 35, Hata_Model_large_city_corection_factor(
-    900, hm), d),  label='suburban 900 MHz large city')
+    900, hm), d),  label = 'suburban 900 MHz large city')
 plt.plot(d, Hata_Model_rural(f[0], 35, Hata_Model_large_city_corection_factor(
-    900, hm), d),  label='rural 900 MHz large city')
-plt.plot(d, path_loss, label=' Free Space 900 MHz')
-plt.plot(d, path_loss_2,  label=' Free Space 1800 MHz')
-plt.plot(d, CCIR_path_loss_1, label='CCIR 900 MHz')
-plt.plot(d, CCIR_path_loss_2, label='CCIR 1800 MHz')
+    900, hm), d),  label = 'rural 900 MHz large city')
+plt.plot(d, path_loss, label = ' Free Space 900 MHz')
+plt.plot(d, path_loss_2,  label = ' Free Space 1800 MHz')
+plt.plot(d, CCIR_path_loss_1, label = 'CCIR 900 MHz')
+plt.plot(d, CCIR_path_loss_2, label = 'CCIR 1800 MHz')
 
 
 plot_default(
     "All Models CICR Free space Hata COMPARISON (urban, suburban, rural) for 900 and 1800 MHz")
 
-save_path = r'E:\OneDrive - University of Bahrain\Documents\UNI\ITCE450\Lab\lab2\figures'
+save_path=r'E:\OneDrive - University of Bahrain\Documents\UNI\ITCE450\Lab\lab2\figures'
 for i in range(1, 14):
-    fig = plt.figure(i)
-    fig.savefig(save_path + r'\figure' + str(i) + '.png', dpi=300)
+    fig=plt.figure(i)
+    fig.savefig(save_path + r'\figure' + str(i) + '.png', dpi = 300)
 
 plt.show()
