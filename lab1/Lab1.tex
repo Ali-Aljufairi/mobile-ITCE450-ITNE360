@@ -23,50 +23,79 @@
 \usepackage{cite}
 \usepackage{lipsum}
 
+%adding needed packages
+\usepackage{listings}
+\usepackage{xcolor}
+
+%defining colors for the code
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+%defining the code style
+\lstdefinestyle{mystyle}{
+  backgroundcolor=\color{backcolour},
+  commentstyle=\color{codegreen},
+  keywordstyle=\color{magenta},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,
+  breaklines=true,
+  captionpos=b,
+  keepspaces=true,
+  numbers=left,
+  numbersep=5pt,
+  showspaces=false,
+  showstringspaces=false,
+  showtabs=false,
+  tabsize=4
+}
 
 \begin{document}
 
 %===========================================================
 \begin{titlepage}
-\begin{center}
+  \begin{center}
 
-% Top 
-\includegraphics[width=0.3\textwidth]{images/Picture2.jpg}~\\[2cm]
-
-
-% Title
-\HRule \\[0.4cm]
-{ \LARGE 
-  \textbf{Mobile and Wireless Networking }\\[0.4cm] 
-  \textbf{ITCE450-417 ITNE360}\\[0.4cm]
-  \emph{Lab1 : Introduction to MATLAB}\\[0.4cm]
-  %  add 
-}
-\HRule \\[1.5cm]
+    % Top 
+    \includegraphics[width=0.3\textwidth]{images/Picture2.jpg}~\\[2cm]
 
 
-
-% Author
-% prepared by :
-{ \large
-  Ali Redha Ali Al Jufairi \\[0.1cm]
-  \texttt{20195330}
-}
-
-{ \large
-  Sayed Mohammed Baqer Adnan\\[0.1cm]
-  \texttt{202008216}
-}
-\vfill
-
-%\textsc{\Large Cyprus University of Technology}\\[0.4cm]
-\textsc{\large Department of Information Technology,\\Computer Engineering }\\[0.4cm]
+    % Title
+    \HRule \\[0.4cm]
+    { \LARGE
+    \textbf{Mobile and Wireless Networking }\\[0.4cm]
+    \textbf{ITCE450-417 ITNE360}\\[0.4cm]
+    \emph{Lab1 : Introduction to MATLAB}\\[0.4cm]
+    %  add 
+    }
+    \HRule \\[1.5cm]
 
 
-% Bottom
-{\large \today}
- 
-\end{center}
+
+    % Author
+    % prepared by :
+    { \large
+    Ali Redha Ali Al Jufairi \\[0.1cm]
+    \texttt{20195330}
+    }
+
+    { \large
+    Sayed Mohammed Baqer Adnan\\[0.1cm]
+    \texttt{202008216}
+    }
+    \vfill
+
+    %\textsc{\Large Cyprus University of Technology}\\[0.4cm]
+    \textsc{\large Department of Information Technology,\\Computer Engineering }\\[0.4cm]
+
+
+    % Bottom
+    {\large \today}
+
+  \end{center}
 \end{titlepage}
 
 
@@ -80,9 +109,9 @@
 \section{Objectives}
 % wrtie me a list of objectives for this lab which is introudction to matlab
 \begin{itemize}
-\item To learn how to install  MATLAB and use the portal.
-\item To learn how to use MATLAB to solve simple problems.
-\item  To learn how to use MATLAB to plot the graph of the cosine function using values of x ranging from 0 to and label the x- and y- accesses.
+  \item To learn how to install  MATLAB and use the portal.
+  \item To learn how to use MATLAB to solve simple problems.
+  \item  To learn how to use MATLAB to plot the graph of the cosine function using values of x ranging from 0 to and label the x- and y- accesses.
 \end{itemize}
 
 \section{Introduction}
@@ -92,27 +121,72 @@ MATLAB is a high-level language and interactive environment that enables you to 
 
 %number list of tasks 
 \begin{enumerate}
-\item Write a MATLAB function to compute the average (mean) of a vector x, then call and execute the function from the command window 
-\begin{enumerate}
-  \item Take a screenshot of the command.  
-\end{enumerate}
-\includegraphics[width=0.8\textwidth]{images/Picture3.png}~\\[3cm]
+  \item Write a MATLAB function to compute the average (mean) of a vector x, then call and execute the function from the command window
+        \begin{enumerate}
+          \item Take a screenshot of the command.
+        \end{enumerate}
 
-\item  Take three screenshots for the output after calling the function with different Values of x.we wrote a simple function to generate a rand vector and then we called the function with the vector as an input and we got the mean of the vector as an output and for loop call 2 function and then printout .
+        \begin{lstlisting}[language=Matlab,style=mystyle]
+  function avg = comput_mean(x)
+
+    avg = sum(x)/length(x);
+
+  end
+\end{lstlisting}~\\[2cm]
+
+  \item  Take three screenshots for the output after calling the function with different Values of x.we wrote a simple function to generate a rand vector and then we called the function with the vector as an input and we got the mean of the vector as an output and for loop call 2 function and then printout .
 
 
-\includegraphics[width=0.8\textwidth]{images/Picture4.png}~\\[3cm]
-\includegraphics[width=0.8\textwidth]{images/Picture5.png}~\\[3cm]
-\item Plot the graph of the cosine function using values of x ranging from 0 to and label the x- and y- accesses.
-\begin{itemize}
-  \item Add Labels for the x- and y- accesses.
-  \item Add a title for your graph call it "Cosine Wave plot". 
-  \item Add a grid
-  \item Add a legend and call your result "Cosine Wave".
-  \item Take a screenshot of your code and the cosine graph
-\end{itemize}
-\includegraphics[width=0.8\textwidth]{images/Picture6.png}~\\[3cm]
-\includegraphics[width=0.8\textwidth]{images/Picture7.png}~\\[3cm]
+        \begin{lstlisting}[language=Matlab,style=mystyle]
+  function rand_vector = rand_vector_generator(n)
+
+    rand_vector = randi([1 50],1,10);
+
+  end
+  
+\end{lstlisting}
+
+        \begin{lstlisting}[language=Matlab, float=h, frame=tb, label=zebra, caption={output}]
+
+rand_vector =
+    36    2   14    3    5   42   35   16   48    2
+
+avg =
+    20.3000
+
+rand_vector =
+    22   20   39   40   10   25   23   33   36   38
+
+avg =
+    28.6000
+
+rand_vector =
+    14   34   33    9    6   25   48   18   30   12
+
+avg =
+    22.9000
+
+\end{lstlisting}~\\[3cm]
+  \item Plot the graph of the cosine function using values of x ranging from 0 to and label the x- and y- accesses.
+        \begin{itemize}
+          \item Add Labels for the x- and y- accesses.
+          \item Add a title for your graph call it "Cosine Wave plot".
+          \item Add a grid
+          \item Add a legend and call your result "Cosine Wave".
+          \item Take a screenshot of your code and the cosine graph
+        \end{itemize}
+        \includegraphics[width=0.8\textwidth]{images/Picture6.png}~\\[2cm]
+        \begin{lstlisting}[language=Matlab,style=mystyle]
+  x = [0:0.1:2*pi];
+
+  plot(x, cos(x), 'color', '#F5A9F7', 'LineWidth', 2);
+  ylabel('cos(x)', 'color', '#D21D55');
+  xlabel('x', 'color', '#D21D55');
+  title('Cosine Wave plot', 'color', '#0d6efd', 'FontSize', 14, 'FontName', 'Times New Roman');
+  grid on;
+  legend('Cosine Wave');
+  
+\end{lstlisting}
 \end{enumerate}
 
 \section{Conclusion}
@@ -123,4 +197,4 @@ In this lab we learned how to use MATLAB to solve simple problems and we learned
 
 
 
-\end{document} 
+\end{document}
